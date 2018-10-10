@@ -1,0 +1,15 @@
+.suggestionBox{
+    border: 2px solid grey;
+    border-top: 0px;
+    width: 30%; 
+}
+
+Link{
+    text-decoration: none;
+    border-bottom: 2px solid grey;
+}
+
+#listDiv{
+    overflow-y: scroll;
+    max-height: 200px;
+}
