@@ -1,48 +1,36 @@
 import React, { Component } from "react";
-import * as Actions from "../Actions/Actions";
-import BooksStore from "../Store/BooksStore";
+import {getDetailsofSpecificBook} from "../Actions/Actions";
 import {withRouter} from "react-router-dom";
+import {bindActionCreators} from "redux";
+import {connect} from "react-redux";
+import "./../css/styles.css";
 
 class BookDetails extends Component {
   constructor(props){
     super(props);
     this.onNavigationHome= this.onNavigationHome.bind(this);
-    this.state={
-      bookDetails:'no book',
-    };
-    
+    this.getBook=this.getBook.bind(this);
   }
 
   componentWillMount(){
-    let param= decodeURIComponent(this.props.match.params.bookname);
-    this.getBook(param);
-    BooksStore.on("change", ()=>{
-      this.setState(
-        {
-          bookDetails: BooksStore.showBookDetails(),
-        });
-    });
-    
+    this.getBook(this.props.match.params.id);
   }
 
-  componentDidMount(){
-   
-  }
-
-  getBook(bookname){
-    Actions.getDetailsofSpecificBook(bookname);
+  getBook(bookId){
+    this.props.getDetailsofSpecificBook(bookId);
   }
 
   onNavigationHome(){
-    BooksStore.resetAll();
     this.props.history.push('/');
   }
 
   render() {
   
-    if(this.state.bookDetails=="no record found." || this.state.bookDetails.length==0){
+    if(this.props.bookDetails=="no record found." || this.props.bookDetails.length==0){
       return (
         <div>
+          <button onClick={this.onNavigationHome}>Home</button>
+          <h1>Book Details</h1>
           <table>
             <thead>
               <tr>
@@ -60,22 +48,24 @@ class BookDetails extends Component {
               </tr>
             </tbody>
           </table>
-          <button onClick={this.onNavigationHome}>Home</button>
-        </div>
+         </div>
       );
       
      
     }
 
-    else if(this.state.bookDetails.length!=0 && this.state.bookDetails.text_reviews_count!=undefined){
-      const text_reviews_count = this.state.bookDetails.text_reviews_count[0]._;
-      const average_rating = this.state.bookDetails.average_rating[0];
-      const title= this.state.bookDetails.best_book[0].title[0];
-      const author= this.state.bookDetails.best_book[0].author[0].name[0];
-      const small_image_url= this.state.bookDetails.best_book[0].small_image_url[0];
-      const ratings_count= this.state.bookDetails.ratings_count[0]._;
+    else if(this.props.bookDetails.length!=0 && this.props.bookDetails[0].text_reviews_count[0]!=undefined){
+      const text_reviews_count = this.props.bookDetails[0].text_reviews_count[0];
+      const average_rating = this.props.bookDetails[0].average_rating[0];
+      const title= this.props.bookDetails[0].title[0];
+      const author= this.props.bookDetails[0].authors[0].author.map((author)=>(author.name[0])).join(', ');
+      const small_image_url= this.props.bookDetails[0].image_url[0];
+      const ratings_count= this.props.bookDetails[0].ratings_count[0];
+      
       return (
         <div>
+          <button onClick={this.onNavigationHome}>Home</button>
+          <h1>Book Details</h1>
           <table>
             <thead>
               <tr>
@@ -97,7 +87,7 @@ class BookDetails extends Component {
               </tr>
             </tbody>
           </table>
-          <button onClick={this.onNavigationHome}>Home</button>
+          
         </div>
       );
     }
@@ -107,5 +97,15 @@ class BookDetails extends Component {
     }
   }  
 }
+
+const mapStateToProps = store => ({
+  bookDetails: store.bookDetails,
+});
+
+const mapDispatchToProps = dispatch => ({
+  getDetailsofSpecificBook: bindActionCreators(getDetailsofSpecificBook, dispatch),
+});
+
+BookDetails = connect(mapStateToProps, mapDispatchToProps)(BookDetails);
 
 export default withRouter(BookDetails);

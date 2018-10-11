@@ -1,63 +1,42 @@
-import React, { Component } from "react";
+import React from 'react'
 import {Link} from "react-router-dom";
+import "./../css/styles.css";
 
-let options, suggestionBoxOpened;
+let options=[];
 
-class Suggestions extends Component  {
-  constructor(props){
-    super(props);
+const Suggestions = (props) => {
+  
+  if(props.results.length!=0){
     
-    this.hideSuggestionBox=this.hideSuggestionBox.bind(this);
-    this.state={
-      suggestionBoxOpened:true,
-    }
-    
-  }
-
-  hideSuggestionBox(){
-    this.setState(
-      {
-      suggestionBoxOpened:false
-      }
-    );
-  }
-
-  render(){
-    const results=this.props.results;
-
-    if(results.length!=0){
-      if(results!="no record found."){
-        let counter=0;
+    if(props.results!="no record found."){
+      
+      let counter=0;
+      options = props.results.map(book => {
         
-        options = results.map(book => {
-          if(counter<5){
-            counter+=1;
-            return(
-            <li key={book.best_book[0].title[0]}>
-              <Link to={'/BookDetails/:' + encodeURIComponent(book.best_book[0].title[0])}>
+        if(counter<5){
+          counter+=1;
+          //
+          return(
+            <li key={book.best_book[0].id[0]._}>
+              <Link to={'/BookDetails/:' + book.best_book[0].id[0]._}>
                 {book.best_book[0].title[0] + ' - ' + book.best_book[0].author[0].name[0]}
               </Link>
-            </li>)
-          }
+            </li>
+            )
         }
-        );
-        options.push(
-        <li key="showMore">{(this.props.totalResults>5)? <Link to={'/BooksList/:' + this.props.input}>{this.props.totalResults-5} More </Link> : 
+      });
+
+      options.push(
+        <li key="showMore">{(props.totalResults>5)? <Link to={'/BooksList/:' + props.input}>{props.totalResults-5} More </Link> : 
         '0 More Results'} 
-        </li>
-        );
-        
-      }
-      else
+        </li>);  
+    }
+
+    else
       options=<p>No record found</p>
-    }
-    else{  
-        options=<p></p>
-    }
-    
-    return (this.state.suggestionBoxOpened) ? <ul onBlur={this.hideSuggestionBox} >{options}</ul>:null
   }
   
+  return <ul className="suggestionBox">{options}</ul>
 }
 
 export default Suggestions;
