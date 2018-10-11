@@ -20,3 +20,8 @@ table,h1,h2{
 table,tr,td{
     border: 1px solid black;
 }
+
+.allBooks{
+    height: 300px;
+    overflow-y: scroll; 
+}

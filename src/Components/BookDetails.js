@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import {getDetailsofSpecificBook} from "../Actions/Actions";
+import {getDetailsofSpecificBook, resetStates} from "../Actions/Actions";
 import {withRouter} from "react-router-dom";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
+import HomeButton from "./HomeButton";
 import "./../css/styles.css";
 
 class BookDetails extends Component {
@@ -16,6 +17,10 @@ class BookDetails extends Component {
     this.getBook(this.props.match.params.id);
   }
 
+  componentWillUnmount(){
+    this.props.resetStates();
+  }
+
   getBook(bookId){
     this.props.getDetailsofSpecificBook(bookId);
   }
@@ -26,10 +31,10 @@ class BookDetails extends Component {
 
   render() {
   
-    if(this.props.bookDetails=="no record found." || this.props.bookDetails.length==0){
+    if(this.props.bookDetails=="no record found."){
       return (
         <div>
-          <button onClick={this.onNavigationHome}>Home</button>
+          <HomeButton onNavigationHome={this.onNavigationHome}></HomeButton>
           <h1>Book Details</h1>
           <table>
             <thead>
@@ -64,7 +69,7 @@ class BookDetails extends Component {
       
       return (
         <div>
-          <button onClick={this.onNavigationHome}>Home</button>
+          <HomeButton onNavigationHome={this.onNavigationHome}></HomeButton>
           <h1>Book Details</h1>
           <table>
             <thead>
@@ -104,6 +109,7 @@ const mapStateToProps = store => ({
 
 const mapDispatchToProps = dispatch => ({
   getDetailsofSpecificBook: bindActionCreators(getDetailsofSpecificBook, dispatch),
+  resetStates: bindActionCreators(resetStates, dispatch),
 });
 
 BookDetails = connect(mapStateToProps, mapDispatchToProps)(BookDetails);

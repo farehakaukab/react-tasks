@@ -33,7 +33,8 @@ export function getBooks(input){
                   }
                   dispatch(
                       {
-                          type: "SHOW_RESULT_COUNT", count: result.GoodreadsResponse.search[0]['total-results'][0]
+                          type: "SHOW_RESULT_COUNT", 
+                          count: result.GoodreadsResponse.search[0]['total-results'][0]
                       }
                   );
                   dispatch(
@@ -46,4 +47,13 @@ export function getBooks(input){
       
       });
   } 
+}
+
+
+export function resetStates(){
+    return(
+        {
+            type: "CLEAR_BOOKDETAIL_DATA"
+        }
+    );
 }

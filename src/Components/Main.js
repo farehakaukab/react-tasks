@@ -1,9 +1,10 @@
 import React,{ Component } from "react";
 import {connect} from "react-redux";
-import {getBooks} from "../Actions/Actions"
+import {getBooks,resetStates} from "../Actions/Actions"
 import Suggestions from "./Suggestions";
+import SearchForm from "./SearchForm";
 import {bindActionCreators} from "redux";
-import "./../css/styles.css";
+//import { debounce } from "debounce";
 
 class Main extends Component {
 
@@ -22,8 +23,9 @@ class Main extends Component {
     componentDidMount(){
         document.addEventListener('mousedown', this.hideSuggestions, false);
       }
-    
+
     componentWillUnMount(){
+        this.props.resetStates();
         document.removeEventListener('mousedown', this.handleClickList, false);
     }
 
@@ -32,21 +34,23 @@ class Main extends Component {
             this.setState({suggestionBoxOpen:false});
         }
     }
+
     getBooks(event){
         this.props.getBooks(event.target.value);  
         this.setState(
             {inputValue: event.target.value,
                 suggestionBoxOpen:true});
     }
+
     onNavigateSearch(){
         this.props.history.push('/BooksList/:'+this.state.inputValue);
       }
+
     render(){
         return (
             <div>
               <h1>Search A Book Name</h1>
-              <input value={this.state.inputValue} onChange={this.getBooks}  placeholder="Search for..."/>
-              <button onClick={this.onNavigateSearch}>Search</button>
+              <SearchForm onNavigateSearch={this.onNavigateSearch} getBooks={this.getBooks} inputValue={this.state.inputValue}></SearchForm>
               {(this.state.suggestionBoxOpen) ? <Suggestions results={this.props.suggestedBooks} input={this.state.inputValue} totalResults={this.props.totalResults}/> : null} 
             </div>
          );

@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import {getBooks} from "../Actions/Actions";
-import {Link} from "react-router-dom";
-import Waypoint from 'react-waypoint';
+import BooksListSection from "./BooksListSection";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
+import HomeButton from "./HomeButton";
 import "./../css/styles.css";
+
 
 class BooksList extends Component {
 
   constructor(props){
     super(props);
-    this.completeList=[];
     this.onNavigationHome= this.onNavigationHome.bind(this);
     this.onNavigationLoad= this.onNavigationLoad.bind(this);
     this.state={
@@ -19,14 +19,12 @@ class BooksList extends Component {
   }
 
   componentWillMount(){
-    this.getAllBooks();
+    this.props.getBooks(this.props.match.params.input);
   }
-  
-  getAllBooks(){
-    if(this.props.match.params.input!=""){
-      this.props.getBooks(this.props.match.params.input);
-    }
-  }
+
+  // componentWillUnmount(){
+  //   books_info=[];
+  // }
 
   onNavigationHome(){
     this.props.history.push('/');
@@ -35,38 +33,15 @@ class BooksList extends Component {
   onNavigationLoad(){
     this.setState({pageCount: this.state.pageCount+1});
     if (this.state.pageCount< (this.props.totalResults/20)) 
-      this.props.getBooks(this.props.match.params.input + '&page=' + this.pageCount);
+      this.props.getBooks(this.props.match.params.input + '&page=' + this.state.pageCount);
   }
   render() {
-    let books_info;
-    if(this.props.suggestedBooks=="no record found." || this.props.suggestedBooks.length==0){
-        this.completeList =  <li key={"no_record"}>No record found</li>
-    }
-    else if (this.props.suggestedBooks.length!=0 && typeof(this.props.suggestedBooks)!='string'){
-      books_info= this.props.suggestedBooks.map((book) => 
-      <li key={book.best_book[0].title[0]}>
-        <Link to={'/BookDetails/:' + book.best_book[0].id[0]._}>
-                {book.best_book[0].title[0] + ' - ' + book.best_book[0].author[0].name[0]}
-              </Link>
-      </li>
-      );
-      this.completeList.key!="no_record" && this.completeList.type!='p'? this.completeList=[...this.completeList,...books_info] : this.completeList=books_info;
-    }
-    else{
-      this.completeList=<p>Fetching Data</p>
-    }
-
-
     return (
       <div>
-        <button onClick={this.onNavigationHome}>Home</button>
+        <HomeButton onNavigationHome={this.onNavigationHome}></HomeButton>
         <h1>Searched Name: {this.props.match.params.input.substring(1)} </h1>
         <h2>Total Results: {this.props.totalResults} </h2>
-        <ul>{this.completeList}</ul>
-        
-        <Waypoint
-          onEnter={this.onNavigationLoad}
-        />
+        <BooksListSection booksList={this.props.suggestedBooks} onNavigationLoad={this.onNavigationLoad}></BooksListSection>
         
       </div>
     );
