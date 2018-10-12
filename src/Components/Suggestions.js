@@ -5,7 +5,7 @@ import "./../css/styles.css";
 let options=[];
 
 const Suggestions = (props) => {
-  
+  console.log(props)
   if(props.results.length!=0){
     
     if(props.results!="no record found."){

@@ -6,7 +6,7 @@ import "./../css/styles.css";
 var books_info;
 
 const BooksListSection = ({booksList, onNavigationLoad}) => {
-  
+  console.log(booksList)
 if(booksList=="no record found."){
     books_info =  <li key={"no_record"}>No record found</li>
     }

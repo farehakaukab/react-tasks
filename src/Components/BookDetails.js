@@ -4,6 +4,7 @@ import {withRouter} from "react-router-dom";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import HomeButton from "./HomeButton";
+//import Spinner from "react-redux-spinner";
 import "./../css/styles.css";
 
 class BookDetails extends Component {
@@ -104,7 +105,7 @@ class BookDetails extends Component {
 }
 
 const mapStateToProps = store => ({
-  bookDetails: store.bookDetails,
+  bookDetails: store.Reducer.bookDetails,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import HomeButton from "./HomeButton";
 import "./../css/styles.css";
 
-
+const listType='Books List';
 class BooksList extends Component {
 
   constructor(props){
@@ -19,7 +19,7 @@ class BooksList extends Component {
   }
 
   componentWillMount(){
-    this.props.getBooks(this.props.match.params.input);
+    this.props.getBooks(this.props.match.params.input, listType);
   }
 
   // componentWillUnmount(){
@@ -33,7 +33,7 @@ class BooksList extends Component {
   onNavigationLoad(){
     this.setState({pageCount: this.state.pageCount+1});
     if (this.state.pageCount< (this.props.totalResults/20)) 
-      this.props.getBooks(this.props.match.params.input + '&page=' + this.state.pageCount);
+      this.props.getBooks(this.props.match.params.input + '&page=' + this.state.pageCount, listType);
   }
   render() {
     return (
@@ -49,8 +49,8 @@ class BooksList extends Component {
 }
 
 const mapStateToProps = store => ({
-  suggestedBooks: store.suggestedBooks,
-  totalResults: store.totalResults
+  suggestedBooks: store.Reducer.suggestedBooks,
+  totalResults: store.Reducer.totalResults
 });
 
 const mapDispatchToProps = dispatch => ({

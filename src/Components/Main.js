@@ -6,6 +6,8 @@ import SearchForm from "./SearchForm";
 import {bindActionCreators} from "redux";
 //import { debounce } from "debounce";
 
+const listType= 'Suggestion List';
+
 class Main extends Component {
 
     constructor(props){
@@ -21,11 +23,11 @@ class Main extends Component {
     }
 
     componentDidMount(){
+        this.props.resetStates();
         document.addEventListener('mousedown', this.hideSuggestions, false);
       }
 
     componentWillUnMount(){
-        this.props.resetStates();
         document.removeEventListener('mousedown', this.handleClickList, false);
     }
 
@@ -36,7 +38,7 @@ class Main extends Component {
     }
 
     getBooks(event){
-        this.props.getBooks(event.target.value);  
+        this.props.getBooks(event.target.value, listType);  
         this.setState(
             {inputValue: event.target.value,
                 suggestionBoxOpen:true});
@@ -58,13 +60,14 @@ class Main extends Component {
 }
 
 const mapStateToProps = state => ({
-        suggestedBooks: state.suggestedBooks,
-        totalResults: state.totalResults,
+        suggestedBooks: state.Reducer.suggestedBooks,
+        totalResults: state.Reducer.totalResults,
 });
 
   
 const mapDispatchToProps = dispatch => ({
     getBooks: bindActionCreators(getBooks, dispatch),
+    resetStates: bindActionCreators(resetStates, dispatch),
 });
   
 Main = connect(mapStateToProps, mapDispatchToProps)(Main);

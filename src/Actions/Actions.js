@@ -20,7 +20,7 @@ export function getDetailsofSpecificBook(id){
   }
 }
 
-export function getBooks(input){
+export function getBooks(input, listType){
   return function (dispatch){
       fetch('https://www.goodreads.com/search.xml?key=nUVxa8PpzM2ozg7ifhJnmg&q='+input)
       .then(res=> res.text())
@@ -33,14 +33,10 @@ export function getBooks(input){
                   }
                   dispatch(
                       {
-                          type: "SHOW_RESULT_COUNT", 
-                          count: result.GoodreadsResponse.search[0]['total-results'][0]
-                      }
-                  );
-                  dispatch(
-                      {
                           type: "SHOW_BOOKS",
                           books: resp,
+                          count: result.GoodreadsResponse.search[0]['total-results'][0],
+                          bookslistType: listType
                       }
                   );
               });
