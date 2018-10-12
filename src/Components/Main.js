@@ -1,6 +1,6 @@
 import React,{ Component } from "react";
 import {connect} from "react-redux";
-import {getBooks,resetStates} from "../Actions/Actions"
+import {getBooks} from "../Actions/Actions"
 import Suggestions from "./Suggestions";
 import SearchForm from "./SearchForm";
 import {bindActionCreators} from "redux";
@@ -23,9 +23,8 @@ class Main extends Component {
     }
 
     componentDidMount(){
-        this.props.resetStates();
         document.addEventListener('mousedown', this.hideSuggestions, false);
-      }
+    }
 
     componentWillUnMount(){
         document.removeEventListener('mousedown', this.handleClickList, false);
@@ -67,7 +66,6 @@ const mapStateToProps = state => ({
   
 const mapDispatchToProps = dispatch => ({
     getBooks: bindActionCreators(getBooks, dispatch),
-    resetStates: bindActionCreators(resetStates, dispatch),
 });
   
 Main = connect(mapStateToProps, mapDispatchToProps)(Main);

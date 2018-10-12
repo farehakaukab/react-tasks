@@ -4,6 +4,7 @@ import BooksListSection from "./BooksListSection";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import HomeButton from "./HomeButton";
+import {Spinner} from 'react-redux-spinner';
 import "./../css/styles.css";
 
 const listType='Books List';
@@ -22,10 +23,7 @@ class BooksList extends Component {
     this.props.getBooks(this.props.match.params.input, listType);
   }
 
-  // componentWillUnmount(){
-  //   books_info=[];
-  // }
-
+ 
   onNavigationHome(){
     this.props.history.push('/');
   }
@@ -36,6 +34,7 @@ class BooksList extends Component {
       this.props.getBooks(this.props.match.params.input + '&page=' + this.state.pageCount, listType);
   }
   render() {
+
     return (
       <div>
         <HomeButton onNavigationHome={this.onNavigationHome}></HomeButton>
@@ -50,7 +49,8 @@ class BooksList extends Component {
 
 const mapStateToProps = store => ({
   suggestedBooks: store.Reducer.suggestedBooks,
-  totalResults: store.Reducer.totalResults
+  totalResults: store.Reducer.totalResults,
+  dataFetched: store.Reducer.dataFetched,
 });
 
 const mapDispatchToProps = dispatch => ({
